@@ -14,7 +14,7 @@ cl:
 gw:
 	clientid=gw
 	host=ambrosius
-	ports=23,53,80,5000
+	ports=23
 	rcpts=fulford
 
 dougal:

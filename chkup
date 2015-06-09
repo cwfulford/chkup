@@ -1,7 +1,7 @@
 #!/bin/bash
-# $Id: chkup,v 1.81 2015/06/09 09:43:37 fulford Exp fulford $
+# $Id: chkup,v 1.82 2015/06/09 10:06:20 fulford Exp fulford $
 # $Source: /src/merlin/usr/local/etc/RCS/chkup,v $
-# $Revision: 1.81 $
+# $Revision: 1.82 $
 # Author C W Fulford.
 # Copyright 2014 (c) C W Fulford.
 # Licensed for public use under the LGPL, .
@@ -28,7 +28,7 @@ fi
 
 config=${config:-"/usr/local/etc/chkup.cf"}
 
-if [ -f $config ] ;then
+if [ ! -f $config ] ;then
 		[ "$verbose" ] && echo "$cmd: $config not found">&2
 fi
 lock=/tmp/$cmd.$clientid.lock
@@ -36,7 +36,7 @@ tcfg=/tmp/$cmd.t$$
 tmp=/var/tmp/$cmd$$
 
 [ -f $lock ] && {
-	[ "$verbose" ] &&echo "$cmd: $lock already set" >&2
+	[ "$verbose" ] &&echo "$cmd: failed - $lock already set" >&2
 	exit 1
 }
 
@@ -76,9 +76,11 @@ _up () { [ "$ports" ] && opt="-p${ports}"
 	return $rval
 }
 while ! _up ;do
-	[ $verbose ] && echo "$host port(s) down" >&2
+	echo "$host port(s) down" >&2
+	cat $tmp >&2
 	[ ! -f $lock ] && _alert down
 	touch $lock 
+
 	sleep $((c++ * 60))
 	[ $c -gt 10 ] &&{
 		echo "$cmd: $host down for 55 minutes! Giving up"
