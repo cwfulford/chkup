@@ -1,0 +1,107 @@
+#!/bin/bash
+# $Id: chkup,v 1.78 2015/06/09 09:04:38 fulford Exp $
+# $Source: /src/merlin/usr/local/etc/RCS/chkup,v $
+# $Revision: 1.78 $
+# Author C W Fulford.
+# Copyright 2014 (c) C W Fulford.
+# Licensed for public use under the LGPL, .
+# For assistance contact fulford@fulford.net 0709 229 5385
+########################################################################
+cmd=`basename $0`
+syntax="$cmd [-c config] [-d(ebug)] [-l] [-r <email_rcpts>] [-v(erbose)] clientid"
+while [ $# -gt 0 ] ;do
+	case $1 in 
+		-c) config=$2;shift 2;;	
+		-d) debug=:;set -x;shift;;
+		-l) log=:;shift;;
+		-r) _rcpts=$2;shift 2;;
+		-v) verbose=:;shift;;
+		 *) clientid=$1;shift;;
+	esac
+done
+
+
+if [ -z "$clientid" ];then
+	echo $syntax >&2;
+	exit 1
+fi
+
+config=${config:-"/usr/local/etc/chkup.cf"}
+
+if [ -f $config ] ;then
+		[ "$verbose" ] && echo "$cmd: $config not found">&2
+fi
+lock=/tmp/$cmd.$clientid.lock
+tcfg=/tmp/$cmd.t$$
+tmp=/var/tmp/$cmd$$
+
+[ -f $lock -a "$verbose" ] && {
+	&& echo "$cmd: $lock already set" >&2
+	exit 1
+}
+
+if [ -f $config ];then
+	if grep -e "^$clientid" $config >/dev/null ;then
+		sed -ne '/^'$clientid':/,/^$/{
+			/[\t ][^#]/p
+		}' <$config >$tcfg
+		. $tcfg
+	else
+		[ "$verbose" ] &&{
+	      	 	echo "$cmd: can't find client id \"$clientid\" in $config" >&2
+		}
+		host=$clientid
+	fi
+fi
+
+
+[ -n "$_rcpts" -a -n "$rcpts" ] && $rcpts="$rcpts,$_rcpts"
+rcpts=${rcpts:-`id -nu`}
+
+_alert () { case $1 in
+		down) mailx -s "ALERT - $host port $ports down" $rcpts <$tmp ;;
+		up) mailx -s "RECOVERED - $host port $ports" $rcpts <$tmp ;;
+	     esac
+	     [ "$log" ] && logger -t "$cmd:" "$host $ports $1"
+	}
+
+_up () { [ "$ports" ] && opt="-p${ports}"
+	if nmap -Pn $opt $host|
+		tee $tmp|grep filtered >/dev/null 2>&1 ;then
+		rval=1
+	else
+		rval=0
+	fi
+	return $rval
+}
+while ! _up ;do
+	[ $verbose ] && echo "$host port(s) down" >&2
+	[ ! -f $lock ] && _alert down
+	touch $lock 2>/dev/null
+	sleep 60 
+done
+[ $verbose ] && cat $tmp
+if [ -f $lock ] ;then
+	#lock is only created if host was down
+	_alert up
+	rm $lock
+fi
+rm  $tmp 
+[ -f $tcfg ] && rm $tcfg
+exit $rval
+
+######################################################################
+# This program is free software: you can redistribute it and or      #
+# modify it under the terms of the Lesser GNU General Public License #
+# as published by the Free Software Foundation, either version 3 of  #
+# the License, or (at your option) any later version.                #
+#                                                                    #
+# This program is distributed in the hope that it will be useful,    #
+# but WITHOUT ANY WARRANTY; without even the implied warranty of     #    
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the      #
+# GNU General Public License for more details.                       #
+#                                                                    # 
+# A copy of the Lesser GNU General Public License and the GNU        #
+# General Public License is available at                             #
+# <http://www.gnu.org/licenses/>.                                    #
+######################################################################

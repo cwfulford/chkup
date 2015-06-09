@@ -1,0 +1,81 @@
+<pre>
+
+bkup:
+	clientid=bkup
+	host=badon-hill.fulford.net
+	ports=21,22,80,111,139,443,445,515,873,2049
+
+cl:
+	clientid=cl
+	host=caswallon-gw
+	ports=22,25,53,80
+	rcpts=fulford
+
+gw:
+	clientid=gw
+	host=ambrosius
+	ports=23,53,80,5000
+	rcpts=fulford
+
+dougal:
+	host=www.dougal-dog.co.uk
+	clientid=imap.dougal.roundabout.com
+	clientname=imap.dougal.roundabout.com-dog
+	ports=80,22,21,110,995,993,143
+	rcpts=fulford@citylinux.com
+
+
+brian:
+	host=www.roundaboutmanor.com
+	clientid=brian
+	clientname=takecare
+	ports=80
+	rcpts=fulford@citywindowsit.com
+
+nh:
+	host=nh
+	clientid=nh
+	clientname=takecare
+	ports=222,1723,3389,5900
+	rcpts=fulford@citywindowsit.com
+
+fc:
+	host=www.fulford.net
+	clientid=fc
+	ports=22
+	rcpts=fulford@fulford.net
+
+rd:
+	host=emeriqa
+	clientid=rd
+	ports=222,10000
+	rcpts=fulford@citylinux.com
+
+wap:
+	host=memnon.fulford.net
+	clientid=wap
+	
+
+test:
+	host=localhost
+	clientid=test
+	ports=80
+	rcpts=fulford@fulford.net
+
+
+######################################################################
+# This program is free software: you can redistribute it and or      #
+# modify it under the terms of the Lesser GNU General Public License #
+# as published by the Free Software Foundation, either version 3 of  #
+# the License, or (at your option) any later version.                #
+#                                                                    #
+# This program is distributed in the hope that it will be useful,    #
+# but WITHOUT ANY WARRANTY; without even the implied warranty of     #    
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the      #
+# GNU General Public License for more details.                       #
+#                                                                    # 
+# A copy of the Lesser GNU General Public License and the GNU        #
+# General Public License is available at                             #
+# &#60;http://www.gnu.org/licenses/&#62;.                                    #
+######################################################################
+</pre>

@@ -1,0 +1,212 @@
+
+<p><a href="#heading1">NAME</a><br/>
+<a href="#heading2">SYNOPSIS</a><br/>
+<a href="#heading3">AVAILABILITY</a><br/>
+<a href="#heading4">DESCRIPTION</a><br/>
+<a href="#heading5">OPTIONS</a><br/>
+<a href="#heading6">EXAMPLES</a><br/>
+<a href="#heading7">BUGS</a><br/>
+<a href="#heading8">SEE ALSO</a><br/>
+<a href="#heading9">AUTHOR</a><br/>
+<a href="#heading10">HISTORY</a><br/>
+
+</p>
+<hr/>
+
+
+<h2 id="heading1">NAME
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b><a href="./scripts.php?script=chkup">chkup</a></b> -
+checks that host is up and specified ports are
+available.</p>
+
+<h2 id="heading2">SYNOPSIS
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b><a href="./scripts.php?script=chkup">chkup</a></b>
+[<b>-c</b> <i>&lt;config_file&gt;</i>] [<b>-d</b>]
+[<b>-l</b>] [<b>-r</b> <i>&lt;rcpt_email_addr&gt;</i>]
+[<b>-v</b>] &lt;<i>clientid</i>&gt;</p>
+
+<h2 id="heading3">AVAILABILITY
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b><a href="./scripts.php?script=chkup">chkup</a></b> is
+a Bourne shell script which should work equally well on all
+versions of UNIX, Linux and Mac OS X.</p>
+
+<h2 id="heading4">DESCRIPTION
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b><a href="./scripts.php?script=chkup">chkup</a></b>
+uses <b><a href="http://nmap.org/book/man.html">
+nmap
+</a></b> to check that specified ports are open on a
+remote host. This functionality duplicates a small part of
+that in <b>chkfw</b> but I find is useful for those clients
+that have sites to which I have no access but which
+nevertheless need monitoring.</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>NB .</b> A
+short client id is normally given in preference to a host
+name on the command line. This is used to identify the
+configuration stanza in the configuration file which will
+have the required hostname or IP address. If no
+configuration file is found or if the client id is not found
+in the configuration file <b><a href="./scripts.php?script=chkup">chkup</a></b> will assume that
+<i>clientid=hostname</i>.</p>
+
+<h2 id="heading5">OPTIONS
+</h2>
+
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<colgroup><col width="11%"></col>
+<col width="3%"></col>
+<col width="4%" class="center"></col>
+<col width="82%"></col>
+</colgroup>
+<tr valign="top" align="left">
+<td></td>
+<td>
+
+
+<p style="margin-top: 1em"><b>-c</b></p></td>
+<td></td>
+<td>
+
+
+<p style="margin-top: 1em">Use the specified configuration
+file in preference to the default
+<i>&quot;/usr/local/etc/chkup.cf&quot;</i>. If no
+configuration file is found the script will attempt to
+soldier on with the information it has from the command
+line.</p> </td></tr>
+<tr valign="top" align="left">
+<td></td>
+<td>
+
+
+<p><b>-l</b></p></td>
+<td></td>
+<td>
+
+
+<p>Use the local syslog facility to record the results of
+the check.</p></td></tr>
+</table>
+
+<p style="margin-left:11%;"><b>-r</b>
+&lt;email_address&gt;</p>
+
+<p style="margin-left:18%;">Send alerts to the specified
+user address. This will be used in preference to the
+recipient specified in the configuration file and is useful
+when testing the script. If no recipient is specified either
+on the command line nor in the configuration file
+<b><a href="./scripts.php?script=chkup">chkup</a></b> will send alerts to the invoking user&rsquo;s
+local mailbox.</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<colgroup><col width="11%"></col>
+<col width="3%"></col>
+<col width="4%" class="center"></col>
+<col width="82%"></col>
+</colgroup>
+<tr valign="top" align="left">
+<td></td>
+<td>
+
+
+<p><b>-d</b></p></td>
+<td></td>
+<td>
+
+
+<p>Start in debug mode. The <b>-x</b> option is set within
+the shell.</p></td></tr>
+<tr valign="top" align="left">
+<td></td>
+<td>
+
+
+<p><b>-v</b></p></td>
+<td></td>
+<td>
+
+
+<p>Set verbose mode. Ordinarily <b><a href="./scripts.php?script=chkup">chkup</a></b> operates
+silently unless show stopping problems are detected. In
+<i>verbose</i> mode <b><a href="./scripts.php?script=chkup">chkup</a></b> reports on each significant
+action.</p> </td></tr>
+</table>
+
+<h2 id="heading6">EXAMPLES
+</h2>
+
+
+<p style="margin-left:22%; margin-top: 1em"><tt><a href="./scripts.php?script=chkup">chkup</a> -l -v
+merlin</tt></p>
+
+<p style="margin-left:11%; margin-top: 1em">Check that
+ports specified in the default configuration file,
+<i>/usr/local/chkup.cf ,</i> are available on the host
+merlin and log the the results using the <b>syslog</b>
+facility.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Verbose mode
+will be used causing <b><a href="./scripts.php?script=chkup">chkup</a></b> to report significant
+actions to standard out or standard error.</p>
+
+<p style="margin-left:11%; margin-top: 1em"><tt>chkup
+www.fulford.net</tt></p>
+
+<p style="margin-left:11%; margin-top: 1em">The script will
+check the configuration file for the client id
+&quot;www.fulford.net&quot;. If no entry is found, as seems
+likely, &quot;www.fulford.net&quot; will be assumed to be a
+hostname and <b><a href="http://nmap.org/book/man.html">
+nmap
+</a></b> will be run with the
+&quot;<i>-Pn</i>&quot; option. No ports will be
+specified.</p>
+
+<h2 id="heading7">BUGS
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The script is
+quite crude having very little error checking. The
+consequences of unexpected input are untested. Where
+multiple ports are checked if any are open this is reported
+as success. This needs dealing with urgently.</p>
+
+<h2 id="heading8">SEE ALSO
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><a href="./scripts.php?script=chkdf&amp;man=y">chkdf</a>,
+<a href="./scripts.php?script=chkftpd&amp;man=y">chkftpd</a>, <a href="./scripts.php?script=chkfw&amp;man=y">chkfw</a>, <a href="./scripts.php?script=clean&amp;man=y">clean</a>,
+<a href="./scripts.php?script=secscan&amp;man=y">secscan</a>.</p>
+
+<h2 id="heading9">AUTHOR
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Clifford W
+Fulford, <a href="http://www.citylinux.com"
+title="Go to the City Linux homepage">
+City Linux
+</a>. Contact <a href="mailto:fulford@fulford.net" title="Send mail to Clifford W Fulford">fulford@fulford.net</a> or +44
+(0)709 229 5385.</p>
+
+<h2 id="heading10">HISTORY
+</h2>
+<hr/>
