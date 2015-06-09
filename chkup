@@ -1,7 +1,7 @@
 #!/bin/bash
-# $Id: chkup,v 1.80 2015/06/09 09:07:07 fulford Exp fulford $
+# $Id: chkup,v 1.81 2015/06/09 09:43:37 fulford Exp fulford $
 # $Source: /src/merlin/usr/local/etc/RCS/chkup,v $
-# $Revision: 1.80 $
+# $Revision: 1.81 $
 # Author C W Fulford.
 # Copyright 2014 (c) C W Fulford.
 # Licensed for public use under the LGPL, .
@@ -60,6 +60,7 @@ rcpts=${rcpts:-`id -nu`}
 
 _alert () { case $1 in
 		down) mailx -s "ALERT - $host port $ports down" $rcpts <$tmp ;;
+		fail) mailx -s "ALERT - $host port $ports still down, giving up" $rcpts <$tmp ;;
 		up) mailx -s "RECOVERED - $host port $ports" $rcpts <$tmp ;;
 	     esac
 	     [ "$log" ] && logger -t "$cmd:" "$host $ports $1"
@@ -77,8 +78,12 @@ _up () { [ "$ports" ] && opt="-p${ports}"
 while ! _up ;do
 	[ $verbose ] && echo "$host port(s) down" >&2
 	[ ! -f $lock ] && _alert down
-	touch $lock 2>/dev/null
-	sleep 60 
+	touch $lock 
+	sleep $((c++ * 60))
+	[ $c -gt 10 ] &&{
+		echo "$cmd: $host down for 55 minutes! Giving up"
+		_alert fail
+	}
 done
 [ $verbose ] && cat $tmp
 if [ -f $lock ] ;then
