@@ -1,7 +1,7 @@
 #!/bin/bash
-# $Id: chkup,v 1.83 2015/06/09 10:35:56 fulford Exp $
+# $Id: chkup,v 1.84 2017/01/17 16:59:24 fulford Exp fulford $
 # $Source: /src/merlin/usr/local/etc/RCS/chkup,v $
-# $Revision: 1.83 $
+# $Revision: 1.84 $
 # Author C W Fulford.
 # Copyright 2014 (c) C W Fulford.
 # Licensed for public use under the LGPL, .
@@ -108,6 +108,7 @@ if [ -f $lock ] ;then
 	_alert up
 	rm $lock
 fi
+_end
 
 ######################################################################
 # This program is free software: you can redistribute it and or      #

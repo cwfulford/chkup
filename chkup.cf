@@ -1,5 +1,10 @@
 <pre>
 
+bfl:
+	clientid=bfl
+	host=bfl.fulford.net
+	ports=22
+
 bkup:
 	clientid=bkup
 	host=badon-hill.fulford.net
@@ -25,19 +30,19 @@ dougal:
 	rcpts=fulford@citylinux.com
 
 
-brian:
-	host=www.roundaboutmanor.com
-	clientid=brian
-	clientname=takecare
-	ports=80
-	rcpts=fulford@citywindowsit.com
-
 nh:
 	host=nh
 	clientid=nh
 	clientname=takecare
 	ports=222,1723,3389,5900
 	rcpts=fulford@citywindowsit.com
+
+ns:
+	host=ns0
+	clientid=ns
+	ports=22,53
+	rcpts=fulford@citylinux.com
+
 
 fc:
 	host=www.fulford.net
