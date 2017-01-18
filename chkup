@@ -1,7 +1,7 @@
 #!/bin/bash
-# $Id: chkup,v 1.93 2017/01/18 15:07:30 fulford Exp fulford $
+# $Id: chkup,v 1.94 2017/01/18 15:12:19 fulford Exp fulford $
 # $Source: /src/merlin/usr/local/etc/RCS/chkup,v $
-# $Revision: 1.93 $
+# $Revision: 1.94 $
 # Author C W Fulford.
 # Copyright 2014 (c) C W Fulford.
 # Licensed for public use under the LGPL, .
@@ -9,7 +9,7 @@
 ########################################################################
 cmd=`basename $0`
 syntax="$cmd [-c config] [-d(ebug)] [-l] [-r <email_rcpts>] [-v(erbose)] clientid"
-trap 15 _end
+trap  "_end" 15
 while [ $# -gt 0 ] ;do
 	case $1 in 
 		-c) config=$2;shift 2;;	
@@ -58,8 +58,9 @@ if [ -f $config ];then
 fi
 
 _end () {
-	rm  $tmp 
+	rm  $tmp j
 	[ -f $tcfg ] && rm $tcfg
+	[ -f $lock ] && rm $lock
 	exit $rval
 }
 
