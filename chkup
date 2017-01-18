@@ -1,7 +1,7 @@
 #!/bin/bash
-# $Id: chkup,v 1.94 2017/01/18 15:12:19 fulford Exp fulford $
+# $Id: chkup,v 1.95 2017/01/18 16:42:41 fulford Exp fulford $
 # $Source: /src/merlin/usr/local/etc/RCS/chkup,v $
-# $Revision: 1.94 $
+# $Revision: 1.95 $
 # Author C W Fulford.
 # Copyright 2014 (c) C W Fulford.
 # Licensed for public use under the LGPL, .
@@ -9,7 +9,6 @@
 ########################################################################
 cmd=`basename $0`
 syntax="$cmd [-c config] [-d(ebug)] [-l] [-r <email_rcpts>] [-v(erbose)] clientid"
-trap  "_end" 15
 while [ $# -gt 0 ] ;do
 	case $1 in 
 		-c) config=$2;shift 2;;	
@@ -63,6 +62,7 @@ _end () {
 	[ -f $lock ] && rm $lock
 	exit $rval
 }
+trap  "_end" 15
 
 getent hosts $host>/dev/null ||{
 	echo "$cmd: can't resolve $host" >&2
@@ -87,7 +87,7 @@ _up () {
 	if [ "$ports" ] ;then
 		nmap -Pn -p$p $host >> $tmp
 		for p in $ports;do
-			state=`awk <$tmp '/'$p'/{print $3}'`
+			state=`awk <$tmp '/'$p'/{print $2}'`
 			if [ $state !~ /open/ ];then
 				return $p
 			fi
