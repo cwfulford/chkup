@@ -1,7 +1,7 @@
 #!/bin/bash
-# $Id: chkup,v 1.95 2017/01/18 16:42:41 fulford Exp $
+# $Id: chkup,v 1.96 2017/01/18 16:45:25 fulford Exp fulford $
 # $Source: /src/merlin/usr/local/etc/RCS/chkup,v $
-# $Revision: 1.95 $
+# $Revision: 1.96 $
 # Author C W Fulford.
 # Copyright 2014 (c) C W Fulford.
 # Licensed for public use under the LGPL, .
@@ -85,7 +85,7 @@ _alert () { case $1 in
 
 _up () { 
 	if [ "$ports" ] ;then
-		nmap -Pn -p$p $host >> $tmp
+		nmap -Pn -p$p $host > $tmp
 		for p in $ports;do
 			state=`awk <$tmp '/'$p'/{print $2}'`
 			if [ $state !~ /open/ ];then
