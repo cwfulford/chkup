@@ -1,7 +1,7 @@
 #!/bin/bash
-# $Id: chkup,v 1.99 2017/01/18 17:32:52 fulford Exp fulford $
+# $Id: chkup,v 1.100 2017/01/18 17:34:10 fulford Exp fulford $
 # $Source: /src/merlin/usr/local/etc/RCS/chkup,v $
-# $Revision: 1.99 $
+# $Revision: 1.100 $
 # Author C W Fulford.
 # Copyright 2014 (c) C W Fulford.
 # Licensed for public use under the LGPL, .
@@ -57,7 +57,7 @@ if [ -f $config ];then
 fi
 
 _end () {
-	rm  $tmp $lock
+	rm  $tmp 
 	[ -f $tcfg ] && rm $tcfg
 	[ -f $lock ] && rm $lock
 	exit $rval
