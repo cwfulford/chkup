@@ -1,7 +1,7 @@
 #!/bin/bash
-# $Id: chkup,v 1.101 2017/01/19 11:08:26 fulford Exp fulford $
+# $Id: chkup,v 1.102 2017/01/19 13:12:10 fulford Exp fulford $
 # $Source: /src/merlin/usr/local/etc/RCS/chkup,v $
-# $Revision: 1.101 $
+# $Revision: 1.102 $
 # Author C W Fulford.
 # Copyright 2014 (c) C W Fulford.
 # Licensed for public use under the LGPL, .
@@ -83,20 +83,15 @@ _alert () { case $1 in
 
 
 
-_up () { 
-	if [ "$ports" ] ;then
-		nmap -Pn -p$ports $host > $tmp
-		for p in `echo $ports|sed 's/,/" "/g'`;do
-			state=`awk <$tmp '/'$p'/{print $2}'`
-			if [ "$state" = /open/ ];then
-				return $p
-			fi
-		done
-	else
-		nmap -Pn -sn $host > $tmp
+_up () { if [ $# -eq 1 ];then
+		state=`awk -v p=$1 <$tmp '/p/{print $2}'`
+		if [ "$state" = /open/ ];then
+			return $1 
+		fi
+	 else
 		state=`awk <$tmp '{if(/Host is up/){
 						print "up"
-					}else{
+				   	}else{
 						print "down"
 					}
 				  }'`
@@ -107,14 +102,22 @@ _up () {
 		fi
 	fi
 }
+if [ $ports ];then
+	opt="-p$ports"
+fi
+nmap -Pn -$opt $host > $tmp
 c=0
 max=10
-while ! _up  && [ $c -lt $max ];do
-	echo "$host port $p down" >&2
-	[ ! -f $lock ] && _alert down
-	touch $lock 
-	sleep $((c++ * 60))
+for p in `echo $ports|sed -e 's/,/ /g';do
+	while ! _up  && [ $c -lt $max ];do
+		echo "$host port $p down" >&2
+		[ ! -f $lock ] && _alert down
+		touch $lock 
+		sleep $((c++ * 60))
+		nmap -Pn -$opt $host > $tmp
+	done
 done
+
 [ $verbose ] && cat $tmp
 if [ -f $lock -a $c -eq $max ] ;then
 	#lock is only created if host was down
