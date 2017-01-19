@@ -1,7 +1,7 @@
 #!/bin/bash
-# $Id: chkup,v 1.115 2017/01/19 13:54:26 fulford Exp fulford $
+# $Id: chkup,v 1.116 2017/01/19 13:56:23 fulford Exp fulford $
 # $Source: /src/merlin/usr/local/etc/RCS/chkup,v $
-# $Revision: 1.115 $
+# $Revision: 1.116 $
 # Author C W Fulford.
 # Copyright 2014 (c) C W Fulford.
 # Licensed for public use under the LGPL, .
@@ -64,11 +64,13 @@ _end () {
 }
 trap  "_end" 15
 
-getent hosts $host>/dev/null ||{
+if ! getent hosts $host>/dev/null;then 
 	echo "$cmd: can't resolve $host" >&2
 	rval=1
 	_end 
-}
+else
+	echo "cmd": using $host as host name.">&2
+fi
 
 [ -n "$_rcpts" -a -n "$rcpts" ] && $rcpts="$rcpts,$_rcpts"
 rcpts=${rcpts:-`id -nu`}
