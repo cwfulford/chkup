@@ -1,7 +1,7 @@
 e!/bin/bash
-# $Id: chkup,v 1.118 2017/01/19 13:57:54 fulford Exp fulford $
+# $Id: chkup,v 1.119 2017/01/19 14:05:42 fulford Exp fulford $
 # $Source: /src/merlin/usr/local/etc/RCS/chkup,v $
-# $Revision: 1.118 $
+# $Revision: 1.119 $
 # Author C W Fulford.
 # Copyright 2014 (c) C W Fulford.
 # Licensed for public use under the LGPL, .
@@ -86,8 +86,6 @@ _alert () { case $1 in
 
 
 _up () { if [ $# -eq 1 ];then
-echo "\$1 = $1"
-read
 		state=`awk -v p=$1  <$tmp '{split($1,a,"/");if(a[1] == p)print $2}'`
 		if [ "$state" = /open/ ];then
 			return $1 
