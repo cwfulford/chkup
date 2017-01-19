@@ -1,7 +1,7 @@
 #!/bin/bash
-# $Id: chkup,v 1.105 2017/01/19 13:19:34 fulford Exp fulford $
+# $Id: chkup,v 1.106 2017/01/19 13:22:49 fulford Exp fulford $
 # $Source: /src/merlin/usr/local/etc/RCS/chkup,v $
-# $Revision: 1.105 $
+# $Revision: 1.106 $
 # Author C W Fulford.
 # Copyright 2014 (c) C W Fulford.
 # Licensed for public use under the LGPL, .
@@ -109,7 +109,7 @@ nmap -Pn $opt $host > $tmp
 c=0
 max=10
 for p in `echo $ports|sed -e 's/,/ /g'`;do
-	while ! _up  && [ $c -lt $max ];do
+	while ! _up $p && [ $c -lt $max ];do
 echo $c
 		echo "$host port $p down" >&2
 		[ ! -f $lock ] && _alert down
