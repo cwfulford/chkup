@@ -1,7 +1,7 @@
 e!/bin/bash
-# $Id: chkup,v 1.117 2017/01/19 13:57:12 fulford Exp fulford $
+# $Id: chkup,v 1.118 2017/01/19 13:57:54 fulford Exp fulford $
 # $Source: /src/merlin/usr/local/etc/RCS/chkup,v $
-# $Revision: 1.117 $
+# $Revision: 1.118 $
 # Author C W Fulford.
 # Copyright 2014 (c) C W Fulford.
 # Licensed for public use under the LGPL, .
@@ -69,7 +69,7 @@ if ! getent hosts $host>/dev/null;then
 	rval=1
 	_end 
 else
-	echo "cmd: using $host as host name.">&2
+	echo "$cmd: using $host as host name.">&2
 fi
 
 [ -n "$_rcpts" -a -n "$rcpts" ] && $rcpts="$rcpts,$_rcpts"
