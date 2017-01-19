@@ -1,7 +1,7 @@
 #!/bin/bash
-# $Id: chkup,v 1.120 2017/01/19 14:06:27 fulford Exp fulford $
+# $Id: chkup,v 1.121 2017/01/19 14:16:13 fulford Exp fulford $
 # $Source: /src/merlin/usr/local/etc/RCS/chkup,v $
-# $Revision: 1.120 $
+# $Revision: 1.121 $
 # Author C W Fulford.
 # Copyright 2014 (c) C W Fulford.
 # Licensed for public use under the LGPL, .
@@ -51,6 +51,7 @@ if [ -f $config ];then
 	else
 		[ "$verbose" ] &&{
 	      	 	echo "$cmd: can't find client id \"$clientid\" in $config" >&2
+			echo "$cmd: using $host as host name.">&2
 		}
 		host=$clientid
 	fi
@@ -68,8 +69,6 @@ if ! getent hosts $host>/dev/null;then
 	echo "$cmd: can't resolve $host" >&2
 	rval=1
 	_end 
-else
-	echo "$cmd: using $host as host name.">&2
 fi
 
 [ -n "$_rcpts" -a -n "$rcpts" ] && $rcpts="$rcpts,$_rcpts"
@@ -112,13 +111,19 @@ c=0
 max=10
 for p in `echo $ports|sed -e 's/,/ /g'`;do
 	while ! _up $p && [ $c -lt $max ];do
-echo $c
 		echo "$host port $p down" >&2
 		[ ! -f $lock ] && _alert down
 		touch $lock 
 		sleep $((c++ * 60))
 		nmap -Pn -$opt $host > $tmp
 	done
+	[ $verbose ] && {
+		if [ $p ];then
+			echo "$cmd: port $p available on $host." >&2
+		else
+			echo "$cmd: $host UP." >&2
+		fi
+	}
 done
 
 if [ -f $lock -a $c -eq $max ] ;then
@@ -132,13 +137,6 @@ elif [ -f $lock ];then
 	_alert up
 	rval=0
 fi
-[ $verbose ] && {
-	if [ $p ];then
-		echo "$cmd: port $p available on $host." >&2
-	else
-		echo "$cmd: $host UP." >&2
-	fi
-}
 _end
 
 ######################################################################

@@ -12,7 +12,7 @@ bkup:
 
 cl:
 	clientid=cl
-	host=caswallon-gw
+	host=caswallon2
 	ports=22,25,53,80
 	rcpts=fulford
 
