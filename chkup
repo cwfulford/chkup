@@ -1,7 +1,7 @@
 #!/bin/bash
-# $Id: chkup,v 1.100 2017/01/18 17:34:10 fulford Exp $
+# $Id: chkup,v 1.101 2017/01/19 11:08:26 fulford Exp fulford $
 # $Source: /src/merlin/usr/local/etc/RCS/chkup,v $
-# $Revision: 1.100 $
+# $Revision: 1.101 $
 # Author C W Fulford.
 # Copyright 2014 (c) C W Fulford.
 # Licensed for public use under the LGPL, .
@@ -108,20 +108,21 @@ _up () {
 	fi
 }
 c=0
-while ! _up  && [ $c -lt 10 ];do
+max=10
+while ! _up  && [ $c -lt $max ];do
 	echo "$host port $p down" >&2
 	[ ! -f $lock ] && _alert down
 	touch $lock 
 	sleep $((c++ * 60))
 done
 [ $verbose ] && cat $tmp
-if [ -f $lock ] ;then
+if [ -f $lock -a $c -eq $max ] ;then
 	#lock is only created if host was down
 	echo "$cmd: $host down for 10 minutes! Giving up"
 	_alert fail
 	rm $lock
 	rval=1	
-else
+elif [ -f $lock ];then
 	_alert up
 	rval=0
 fi
